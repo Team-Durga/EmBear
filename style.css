@@ -1,18 +1,22 @@
+body{
+    background-color: rgb(138, 162, 172)
+}
 img{
     width: 222px;
     align-items: center;
     justify-content: center;
     display: flex;
     flex-wrap: wrap;
+    border-radius: 33px;
 
 }
 button{
     font-size: 33px;
     border-radius: 7px;
-    border-color: aquamarine;
-    background-color: blue;
+    border-color: rgb(1, 2, 21);
+    background-color: rgb(84, 101, 171);
     border-width: 11px;
-    color: aqua;
+    color: rgb(44, 59, 93);
     width: 222px;
     height: 111px;
 }
@@ -21,9 +25,11 @@ h1{
     text-align: right;
     align-items: center;
     justify-content: center;
+    color: rgb(44, 59, 93);
 }
 p{
     font-size: 44px;
+    color: rgb(44, 59, 93);
 }
 @media (max-width: 768px) {
     img, h1{
@@ -33,14 +39,11 @@ p{
     button{
         margin-left: 7px;
         margin-right: 7px;
+        margin-bottom: 7px;
     }
     p{
         font-size: 30px;
     }
-    .main{
-        border-spacing: 0px;
-    }
-
 }
 @media (max-width: 1024px) {
   

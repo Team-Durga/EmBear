@@ -1,93 +1,72 @@
-body{
-    background-color: rgb(211, 208, 181)
-}
-img{
-    width: 222px;
+body {
+    background-color: rgb(211, 208, 181);
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 800px;
+    margin: auto;
+}
+
+img {
+    width: 222px;
+    border-radius: 33px;
+}
+
+.button-group {
     display: flex;
     flex-wrap: wrap;
-    border-radius: 33px;
-
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
 }
-button{
-    font-size: 33px;
-    border-radius: 22px;
-    border-color: rgb(50, 58, 80);
+
+button {
+    font-size: 20px;
+    border-radius: 12px;
+    border: 3px solid rgb(50, 58, 80);
     background-color: rgb(211, 208, 181);
-    border-width: 11px;
     color: rgb(44, 59, 93);
-    width: 222px;
-    height: 111px;
+    width: 180px;
+    height: 60px;
     text-decoration: underline;
 }
-h1{
-    font-size: 66px;
-    text-align: right;
-    align-items: center;
-    justify-content: center;
-    color: rgb(44, 59, 93);
-}
-p{
-    font-size: 44px;
-    color: rgb(44, 59, 93);
-}
-@media (max-width: 768px) {
-    img{
-        margin-left: 123px;
-        margin-right: 123px;
-    }
-    h1{
-        margin-left: 55px;
-        margin-right: 55px;
-    }
-    button{
-        margin-left: 7px;
-        margin-right: 7px;
-        margin-bottom: 7px;
-        margin-top: 7px;
-    }
-    p{
-        font-size: 30px;
-    }
-}
-@media (max-width: 1024px) {
-    img{
-        margin-left: 188px;
-        margin-right: 188px;
-    }
-    h1{
-        margin-left: 77px;
-        margin-right: 77px;
-    }
-    button{
-        margin-left: 14px;
-        margin-right: 14px;
-        margin-bottom: 14px;
-        margin-top: 14px;
-    }
-    p{
-        font-size: 44px;
-    }
-  
-}
-@media (min-width: 1200px) {
-    img{
-        margin-left: 202px;
-        margin-right: 202px;
-    }
-    h1{
-        margin-left: 99px;
-        margin-right: 99px;
-    }
-    button{
-        margin-left: 22px;
-        margin-right: 22px;
-        margin-bottom: 22px;
-        margin-top: 22px;
-    }
-    p{
-        font-size: 55px;
-    }
 
+h1 {
+    font-size: 50px;
+    color: rgb(44, 59, 93);
+    margin: 20px 0;
+}
+
+p {
+    font-size: 22px;
+    color: rgb(44, 59, 93);
+    max-width: 600px;
+}
+
+/* Reszponzív módosítások */
+@media (max-width: 768px) {
+    p {
+        font-size: 18px;
+    }
+    h1 {
+        font-size: 40px;
+    }
+}
+
+@media (min-width: 1200px) {
+    p {
+        font-size: 26px;
+    }
 }

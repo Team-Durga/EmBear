@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(138, 162, 172)
+    background-color: rgb(211, 208, 181)
 }
 img{
     width: 222px;
@@ -12,13 +12,14 @@ img{
 }
 button{
     font-size: 33px;
-    border-radius: 7px;
-    border-color: rgb(1, 2, 21);
-    background-color: rgb(84, 101, 171);
+    border-radius: 22px;
+    border-color: rgb(50, 58, 80);
+    background-color: rgb(211, 208, 181);
     border-width: 11px;
     color: rgb(44, 59, 93);
     width: 222px;
     height: 111px;
+    text-decoration: underline;
 }
 h1{
     font-size: 66px;
@@ -32,22 +33,61 @@ p{
     color: rgb(44, 59, 93);
 }
 @media (max-width: 768px) {
-    img, h1{
-        margin-left: 111px;
-        margin-right: 111px;
+    img{
+        margin-left: 123px;
+        margin-right: 123px;
+    }
+    h1{
+        margin-left: 55px;
+        margin-right: 55px;
     }
     button{
         margin-left: 7px;
         margin-right: 7px;
         margin-bottom: 7px;
+        margin-top: 7px;
     }
     p{
         font-size: 30px;
     }
 }
 @media (max-width: 1024px) {
+    img{
+        margin-left: 188px;
+        margin-right: 188px;
+    }
+    h1{
+        margin-left: 77px;
+        margin-right: 77px;
+    }
+    button{
+        margin-left: 14px;
+        margin-right: 14px;
+        margin-bottom: 14px;
+        margin-top: 14px;
+    }
+    p{
+        font-size: 44px;
+    }
   
 }
 @media (min-width: 1200px) {
+    img{
+        margin-left: 202px;
+        margin-right: 202px;
+    }
+    h1{
+        margin-left: 99px;
+        margin-right: 99px;
+    }
+    button{
+        margin-left: 22px;
+        margin-right: 22px;
+        margin-bottom: 22px;
+        margin-top: 22px;
+    }
+    p{
+        font-size: 55px;
+    }
 
 }

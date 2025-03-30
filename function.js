@@ -67,7 +67,7 @@ function Jatek9_3(){
 }
 
 function Jatek10_2(){
-    window.location.href = "index.html"
+    window.location.href = "jatekvege.html"
 }
 
 function Kerdoiv(){

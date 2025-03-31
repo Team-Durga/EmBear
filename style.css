@@ -67,9 +67,14 @@ h3{
 ul{
     font-size: 18px;
     color: rgb(44, 59, 93);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
     max-width: 600px;
+    margin: auto;
 }
-
 p {
     font-size: 22px;
     color: rgb(44, 59, 93);

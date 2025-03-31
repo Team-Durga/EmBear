@@ -4,7 +4,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: justify;
     margin: 0;
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
@@ -15,7 +15,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    text-align: justify;
     max-width: 600px;
     margin: auto;
 }
@@ -41,7 +41,7 @@ button {
     color: rgb(44, 59, 93);
     width: 180px;
     height: 60px;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .button-group2 {
@@ -56,6 +56,18 @@ h1 {
     font-size: 50px;
     color: rgb(44, 59, 93);
     margin: 20px 0;
+}
+
+h3{
+    font-size: 24px;
+    color: rgb(44, 59, 93);
+    margin: 20px 0;
+}
+
+ul{
+    font-size: 18px;
+    color: rgb(44, 59, 93);
+    max-width: 600px;
 }
 
 p {

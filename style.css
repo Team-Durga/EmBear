@@ -90,6 +90,10 @@ p {
     h1 {
         font-size: 40px;
     }
+    ul{
+        margin-left: 12px;
+        margin-right: 12px;
+    };
 }
 
 @media (min-width: 1200px) {

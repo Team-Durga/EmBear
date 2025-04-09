@@ -39,7 +39,7 @@ button {
     border-radius: 12px;
     border: 3px solid #FF6F00;
     background-color: #0A2540;
-    color: #D97700;
+    color: #FF6F00;
     width: 180px;
     height: 60px;
     text-decoration: none;
@@ -55,19 +55,19 @@ button {
 
 h1 {
     font-size: 50px;
-    color: #D97700;
+    color: #FF6F00;
     margin: 20px 0;
 }
 
 h3{
     font-size: 24px;
-    color: #D97700;
+    color: #FF6F00;
     margin: 20px 0;
 }
 
 p {
     font-size: 22px;
-    color: #D97700;
+    color: #FF6F00;
     max-width: 600px;
 }
 

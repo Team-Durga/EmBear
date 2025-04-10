@@ -1,5 +1,5 @@
 body {
-    background-color: #0A2540;
+    background-color: #98FF98;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,7 +67,7 @@ h3{
 
 p {
     font-size: 22px;
-    color:  #98FF98;
+    color:  #0A2540;
     max-width: 600px;
 }
 

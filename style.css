@@ -1,5 +1,5 @@
 body {
-    background-color: #F9FCFF;
+    background-color: #FFFFFF;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,7 +38,7 @@ button {
     font-size: 20px;
     border-radius: 12px;
     border: 3px solid #F5A623;
-    background-color: #F9FCFF;
+    background-color: #FFFFFF;
     color: #0B1A2E;
     width: 180px;
     height: 60px;

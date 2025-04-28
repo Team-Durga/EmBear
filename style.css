@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(233, 208, 158);
+    background-color: rgb(240, 248, 255);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,9 +37,9 @@ img {
 button {
     font-size: 20px;
     border-radius: 12px;
-    border: 3px solid rgb(119, 8, 8);
-    background-color: rgb(233, 208, 158);
-    color: rgb(119, 8, 8);
+    border: 3px solid rgb(255, 255, 0);
+    background-color: rgb(240, 248, 255);
+    color: rgb(0, 0, 139);
     width: 180px;
     height: 60px;
     text-decoration: none;
@@ -55,19 +55,19 @@ button {
 
 h1 {
     font-size: 50px;
-    color: rgb(119, 8, 8);
+    color: rgb(0, 0, 139);
     margin: 20px 0;
 }
 
 h3{
     font-size: 24px;
-    color: rgb(119, 8, 8);
+    color: rgb(0, 0, 139);
     margin: 20px 0;
 }
 
 p {
     font-size: 22px;
-    color: rgb(119, 8, 8);
+    color: rgb(0, 0, 139);
     max-width: 600px;
 }
 

@@ -46,29 +46,6 @@ button {
     transition: all 0.3s ease;
 }
 
-#Jatek1_1:active,
-#Jatek2_4:active,
-#Jatek3_2:active,
-#Jatek4_2:active,
-#Jatek5_4:active,
-#Jatek6_1:active,
-#Jatek7_1:active,
-#Jatek8_4:active,
-#Jatek9_3:active,
-#Jatek10_2:active {
-    background-color: green;
-    color: white;
-    border: 3px solid green;
-    transform: scale(1.11);
-}
-
-button:active {
-    background-color: red;
-    color: white;
-    border: 3px solid red;
-    transform: scale(1.11);
-}
-
 h1 {
     font-size: 50px;
     color: #0B1A2E;

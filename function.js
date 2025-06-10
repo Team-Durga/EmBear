@@ -71,8 +71,7 @@ function Jatek10_2(){
 }
 
 function Kerdoiv(){
-    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSdWdsZrTbpXa52IMQxNFjq37W6qRhau5qeJqn5svjdNtx5PhQ/viewform?usp=dialog"
-}
+    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSeFvPmEca9IS2_icFAsF6pibF7UtNv8f7yaJPXlY8UVxOYbkQ/viewform?usp=header"
 
 function Instagram(){
     window.location.href = "https://www.instagram.com/durga.team/"

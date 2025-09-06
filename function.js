@@ -23,7 +23,7 @@ function Verseny(){
 }
 
 function Fooldal(){
-    window.location.href = "magyar_udvozlo.html"
+    window.location.href = "legelso.html"
 }
 
 function Tovabb(){

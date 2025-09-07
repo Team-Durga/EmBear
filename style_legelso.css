@@ -112,7 +112,8 @@ p {
         font-size: 36px;
     }
     body {
-        max-width:768px;
+        width: 100%;
+        max-width: 100%;
     }
 }
 

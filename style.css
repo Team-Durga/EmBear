@@ -26,6 +26,9 @@ img {
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 }
 
+#SS {
+    position: sticky;
+
 .button-group {
     display: flex;
     flex-wrap: wrap;

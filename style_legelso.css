@@ -97,14 +97,14 @@ h3{
 }
 
 p {
-    font-size: 22px;
+    font-size: 18px;
     color: #0B1A2E;
     max-width: 600px;
 }
 
 @media (max-width: 768px) {
     p {
-        font-size: 22px;
+        font-size: 18px;
     }
     h1 {
         font-size: 36px;
@@ -113,6 +113,6 @@ p {
 
 @media (min-width: 1200px) {
     p {
-        font-size: 30px;
+        font-size: 26px;
     }
 }

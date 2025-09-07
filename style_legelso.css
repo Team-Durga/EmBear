@@ -16,14 +16,16 @@ body {
 
 #pic {
     margin-top: 69px;
+    margin-bottom: 22px;
 }
 
 .mid {
-    margin: auto;
+    margin-left: 11px;
 }
 
 #ft {
     margin-bottom: 69px;
+    margin-top: 22px;
 }
 
 .header, .footer {

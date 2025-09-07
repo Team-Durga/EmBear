@@ -22,10 +22,6 @@ body {
     margin-bottom: 69px;
 }
 
-.mid {
-    margin-left: 9px;
-}
-
 .header, .footer {
     background-color: #0B1A2E;
     color: #FFFFFF;
@@ -105,8 +101,6 @@ p {
 @media (max-width: 768px) {
     p {
         font-size: 22px;
-        margin-left: 2px;
-        margin-right: 12px;
     }
     h1 {
         font-size: 36px;

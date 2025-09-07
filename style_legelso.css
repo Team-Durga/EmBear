@@ -28,6 +28,10 @@ body {
     margin-top: 44px;
 }
 
+* {
+  outline: 1px solid red;
+}
+
 .header, .footer {
     background-color: #0B1A2E;
     color: #FFFFFF;

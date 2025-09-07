@@ -10,6 +10,10 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+#SM {
+    color: #FFFFFF;
+}
+
 .header, .footer {
     background-color: #0B1A2E;
     color: #FFFFFF;

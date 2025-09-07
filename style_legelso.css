@@ -14,10 +14,16 @@ body {
     color: #FFFFFF;
 }
 
-.mid {
+#pic {
     margin-top: 69px;
-    margin-left: 9px;
+}
+
+#ft {
     margin-bottom: 69px;
+}
+
+.mid {
+    margin-left: 9px;
 }
 
 .header, .footer {

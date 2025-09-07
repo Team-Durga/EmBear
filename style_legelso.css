@@ -111,6 +111,9 @@ p {
     h1 {
         font-size: 36px;
     }
+    body {
+        max-width:768px;
+    }
 }
 
 @media (min-width: 1200px) {

@@ -23,7 +23,7 @@ function Verseny(){
 }
 
 function Fooldal(){
-    window.location.href = "legelso.html"
+    window.location.href = "first.html"
 }
 
 function Tovabb(){
@@ -83,7 +83,7 @@ function Angol(){
 }
 
 function Magyar(){
-    window.location.href = "legelso.html"
+    window.location.href = "first.html"
 }
 
 function eTagok(){

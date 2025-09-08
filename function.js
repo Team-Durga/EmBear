@@ -2,6 +2,10 @@ function Tagok(){
     window.location.href = "tagok.html"
 }
 
+function Menu(){
+    window.location.href = "menu.html"
+}
+
 function Autizmus(){
     window.location.href = "autizmus.html"
 }

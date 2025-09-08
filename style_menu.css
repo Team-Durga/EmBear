@@ -65,6 +65,7 @@ img {
     justify-content: center;
     gap: 10px;
     margin: 20px 0;
+    text-decoration: underline;
 }
 
 button {
@@ -75,7 +76,6 @@ button {
     color: #0B1A2E;
     width: 270px;
     height: 60px;
-    text-decoration: underline;
 }
 
 .button-group2 {

@@ -6,6 +6,10 @@ function Menu(){
     window.location.href = "menu.html"
 }
 
+function Backmenu(){
+    window.location.href = "first.html"
+}
+
 function Autizmus(){
     window.location.href = "autizmus.html"
 }

@@ -14,22 +14,6 @@ body {
     color: #FFFFFF;
 }
 
-#MS {
-    width: 101px;
-    height: 33px;
-    font-size: 20px;
-    border-radius: 22px;
-    border: 3px solid #F5A623;
-    background-color: #0B1A2E;
-    color: #FFFFFF;
-    text-decoration: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
-}
-
 #logo{
     width: 88px;
 }

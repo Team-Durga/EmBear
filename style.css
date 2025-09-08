@@ -14,6 +14,15 @@ body {
     color: #FFFFFF;
 }
 
+#MS {
+    width: 140px;
+    height: 41px;
+}
+
+#logo{
+    width: 44px;
+}
+
 header {
     margin-bottom: 69px;
 }

@@ -15,15 +15,18 @@ body {
 }
 
 #logo{
+    margin-top: 7px;
     width: 88px;
 }
 
 header {
     margin-bottom: 69px;
+    height: 333px;
 }
 
 footer {
     margin-top: 69px;
+    height: 333px;
 }
 
 footer, header{

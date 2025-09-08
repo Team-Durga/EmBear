@@ -10,41 +10,6 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* HEADER: legyen soros elrendezés */
-.container > header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between; /* logo balra, gomb jobbra, cím közé vagy rugalmasan */
-  width: 100%;
-  padding: 10px 16px;
-  box-sizing: border-box;
-}
-
-/* logo */
-.container > header #logo {
-  width: 88px;   /* igény szerint 60px-re is csökkentheted */
-  height: auto;
-  margin-right: 12px;
-}
-
-/* cím a headerben - legyen fehér és ne legyen margó */
-.container > header h3 {
-  margin: 0;
-  color: #FFFFFF;   /* felülírja a globális h3 színt */
-  font-size: 20px;
-  flex: 1;          /* kitölti a maradék helyet, így középen látszik */
-  text-align: center;
-}
-
-/* gombcsoport a headerben */
-.container > header .button-group {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 #HP, #hagyja { 
     color: #FFFFFF;
 }

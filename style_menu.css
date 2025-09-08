@@ -14,6 +14,10 @@ body {
     color: #FFFFFF;
 }
 
+#me {
+    width: 180px;
+}
+
 header {
     margin-bottom: 69px;
 }

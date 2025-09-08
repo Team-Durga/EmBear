@@ -20,6 +20,9 @@ body {
 
 header {
     margin-bottom: 69px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 footer {

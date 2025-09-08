@@ -16,6 +16,7 @@ body {
 
 #me {
     width: 180px;
+    border: 3px solid #F5A623;
 }
 
 header {
@@ -67,7 +68,7 @@ img {
 button {
     font-size: 20px;
     border-radius: 22px;
-    border: 3px solid #F5A623;
+    border: 3px solid #FFFFFF;
     background-color: #FFFFFF;
     color: #0B1A2E;
     width: 270px;

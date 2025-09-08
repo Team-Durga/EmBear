@@ -74,7 +74,7 @@ button {
     color: #0B1A2E;
     width: 270px;
     height: 60px;
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .button-group2 {

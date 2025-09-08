@@ -65,7 +65,7 @@ img {
     justify-content: center;
     gap: 10px;
     margin: 20px 0;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 button {

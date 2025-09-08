@@ -23,7 +23,7 @@ header {
 }
 
 footer {
-    margin-top: 138px;
+    margin-top: 69px;
 }
 
 footer, header{
@@ -31,22 +31,13 @@ footer, header{
     width: 100%;
 }
 
-footer .container {
+header, footer .container {
     max-width: 800px;
     margin: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #FFFFFF;
-}
-header .container {
-    max-width: 800px;
-    margin: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     color: #FFFFFF;
 }
 

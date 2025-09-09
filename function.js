@@ -6,6 +6,10 @@ function Menu(){
     window.location.href = "menu.html"
 }
 
+function eMenu(){
+    window.location.href = "emenu.html"
+}
+
 function Backmenu(){
     window.location.href = "first.html"
 }

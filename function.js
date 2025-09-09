@@ -87,7 +87,7 @@ function Instagram(){
 }
 
 function Angol(){
-    window.location.href = "angol_udvozlo.html"
+    window.location.href = "efirst.html"
 }
 
 function Magyar(){

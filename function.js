@@ -128,7 +128,7 @@ function eVerseny(){
 }
 
 function eFooldal(){
-    window.location.href = "angol_udvozlo.html"
+    window.location.href = "efirst.html"
 }
 
 function eTovabb(){

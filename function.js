@@ -14,6 +14,11 @@ function Backmenu(){
     window.location.href = "first.html"
 }
 
+function eBackmenu(){
+    window.location.href = "efirst.html"
+}
+
+
 function Autizmus(){
     window.location.href = "autizmus.html"
 }

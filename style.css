@@ -43,6 +43,16 @@ header, footer .container {
     color: #FFFFFF;
 }
 
+details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
+    max-width: 1200px;
+    margin: auto;
+}
+
 .container {
     display: flex;
     flex-direction: column;

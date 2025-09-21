@@ -46,11 +46,20 @@ details {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+details {
     display: block;
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px auto;
-    text-align: justify;
+    width: 100%;             
+    margin: 20px auto;         
+}
+
+details > summary, 
+details > * {
+    max-width: 1200px;       
+    margin: 0 auto;   
+    display: block;
+    text-align: center;
 }
 
 .container {

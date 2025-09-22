@@ -19,7 +19,6 @@ body {
 
 header {
     margin-bottom: 69px;
-    max-height: 666px;
 }
 
 footer {
@@ -33,7 +32,7 @@ footer, header{
 }
 
 header, footer .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: auto;
     display: flex;
     flex-direction: column;

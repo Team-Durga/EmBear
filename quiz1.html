@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Igaz vagy Hamis Quiz</title>
 <style>
-    /* Alap stílusok */
     body {
         font-family: 'Arial', sans-serif;
         background: linear-gradient(to right, #f8f9fa, #e9ecef);
@@ -51,6 +50,9 @@
         margin: 5px 0;
         font-size: 0.95rem;
         cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 6px;
+        transition: background-color 0.3s, color 0.3s;
     }
 
     input[type="radio"] {
@@ -74,31 +76,16 @@
         background-color: #0056b3;
     }
 
-    #result {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #212529;
-        margin-top: 10px;
-    }
-
     /* Reszponzív */
     @media (max-width: 768px) {
-        body {
-            padding: 10px;
-        }
-
-        .question {
-            padding: 15px;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-        }
-
-        button {
-            width: 100%;
-        }
+        body { padding: 10px; }
+        .question { padding: 15px; }
+        h1 { font-size: 1.5rem; }
+        button { width: 100%; }
     }
+
+    .correct { background-color: #d4edda; color: #155724; }
+    .incorrect { background-color: #f8d7da; color: #721c24; }
 </style>
 </head>
 <body>
@@ -106,8 +93,7 @@
 <h1>Igaz vagy Hamis Quiz</h1>
 
 <div id="quiz"></div>
-<button onclick="checkAnswers()">Eredmény</button>
-<div id="result"></div>
+<button onclick="checkAnswers()">Ellenőrzés</button>
 
 <script>
 const questions = [
@@ -137,14 +123,19 @@ questions.forEach((q, index) => {
 });
 
 function checkAnswers() {
-    let score = 0;
     questions.forEach((q, index) => {
         const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const labels = document.querySelectorAll(`input[name="q${index}"]`);
         if (selected) {
-            if ((selected.value === "true") === q.answer) score++;
+            if ((selected.value === "true") === q.answer) {
+                labels.forEach(label => label.parentElement.classList.remove('incorrect'));
+                selected.parentElement.classList.add('correct');
+            } else {
+                labels.forEach(label => label.parentElement.classList.remove('correct'));
+                selected.parentElement.classList.add('incorrect');
+            }
         }
     });
-    document.getElementById("result").innerHTML = `Eredmény: ${score} / ${questions.length}`;
 }
 </script>
 

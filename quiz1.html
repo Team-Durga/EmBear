@@ -31,7 +31,7 @@
         padding: 20px;
         margin: 10px 0;
         border-radius: 12px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
         transition: transform 0.2s;
     }
 
@@ -50,9 +50,9 @@
         margin: 5px 0;
         font-size: 0.95rem;
         cursor: pointer;
-        padding: 5px 10px;
+        padding: 8px 10px;
         border-radius: 6px;
-        transition: background-color 0.3s, color 0.3s;
+        transition: background-color 0.2s, color 0.2s;
     }
 
     input[type="radio"] {
@@ -60,9 +60,16 @@
         accent-color: #007bff;
     }
 
+    .controls {
+        width: 100%;
+        max-width: 700px;
+        display: flex;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
     button {
         padding: 12px 25px;
-        margin: 20px 0;
         font-size: 1rem;
         border: none;
         border-radius: 8px;
@@ -76,32 +83,63 @@
         background-color: #0056b3;
     }
 
+    button.secondary {
+        background-color: #6c757d;
+    }
+
+    button.secondary:hover { background-color: #5a6268; }
+
     @media (max-width: 768px) {
         body { padding: 10px; }
         .question { padding: 15px; }
         h1 { font-size: 1.5rem; }
+        .controls { flex-direction: column; }
         button { width: 100%; }
     }
 
-    .correct { background-color: #d4edda; color: #155724; }
-    .incorrect { background-color: #f8d7da; color: #721c24; }
+    .correct { background-color: #d4edda; color: #155724; border: 1px solid #9fe3b0; }
+    .incorrect { background-color: #f8d7da; color: #721c24; border: 1px solid #f2a1a1; }
+
+    #result {
+        margin-top: 12px;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    #answerKey {
+        margin-top: 10px;
+        font-size: 0.95rem;
+        color: #333;
+        background: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
 </style>
 </head>
 <body>
 
 <h1>Igaz vagy Hamis Quiz</h1>
 
-<div id="quiz"></div>
-<button onclick="checkAnswers()">Ellenőrzés</button>
+<div id="quiz" aria-live="polite"></div>
+
+<div class="controls">
+    <button id="checkBtn">Ellenőrzés</button>
+    <button id="resetBtn" class="secondary">Visszaállít</button>
+</div>
+
+<div id="result" role="status" aria-atomic="true"></div>
+<div id="answerKey" style="display:none"></div>
 
 <script>
+/* Javított helyes válaszok (boolean formátumban) */
 const questions = [
-    { text: "1. A kibővített csillag topológiát akkor szokás alkalmazni, ha a lehető legnagyobb mértékű védelmet kell elérni az esetleges szolgáltatás kimaradással szemben.", answer: true },
+    { text: "1. A kibővített csillag topológiát akkor szokás alkalmazni, ha a lehető legnagyobb mértékű védelmet kell elérni az esetleges szolgáltatás kimaradással szemben.", answer: false },
     { text: "2. A legtöbb hálózati operációs rendszer az ügyfél-kiszolgáló modellt követi.", answer: true },
     { text: "3. A hálózati erőforrások (fájlok, nyomtatók, alkalmazások) kiszolgálókon való koncentrálása megnehezíti az adatok karbantartását és biztonsági mentését.", answer: false },
     { text: "4. Ha a külső felhasználó számára nem ismert a hálózathoz való csatlakozás feltételrendszere, a hálózat működése, akkor nyilvánosság szerint zárt hálózatról beszélünk.", answer: true },
     { text: "5. Ethernet hálózatokban a véletlen átvitelvezérlés az alkalmazott.", answer: true },
-    { text: "6. A vonalkapcsolás esetén az adó és a vevő is egy központhoz kapcsolódik.", answer: false }, // javítva
+    { text: "6. A vonalkapcsolás esetén az adó és a vevő is egy központhoz kapcsolódik.", answer: true },
     { text: "7. Half-duplex kommunikációnál a hálózati kommunikáció kétirányú.", answer: true },
     { text: "8. Az átvitel sávszélességét mindig a leggyorsabb elem sebessége határozza meg.", answer: false },
     { text: "9. A csavart érpáras kábelek közül az STP az elterjedtebb.", answer: false },
@@ -110,9 +148,11 @@ const questions = [
 
 const quizDiv = document.getElementById("quiz");
 
+/* Kérdések megjelenítése */
 questions.forEach((q, index) => {
     const div = document.createElement("div");
     div.className = "question";
+    div.setAttribute('data-index', index);
     div.innerHTML = `
         <p>${q.text}</p>
         <label><input type="radio" name="q${index}" value="true"> Igaz</label>
@@ -121,21 +161,85 @@ questions.forEach((q, index) => {
     quizDiv.appendChild(div);
 });
 
+/* Kiértékelés */
 function checkAnswers() {
-    questions.forEach((q, index) => {
-        const selected = document.querySelector(`input[name="q${index}"]:checked`);
-        const labels = document.querySelectorAll(`input[name="q${index}"]`);
-        if (selected) {
-            if ((selected.value === "true") === q.answer) {
-                labels.forEach(label => label.parentElement.classList.remove('incorrect'));
-                selected.parentElement.classList.add('correct');
-            } else {
-                labels.forEach(label => label.parentElement.classList.remove('correct'));
-                selected.parentElement.classList.add('incorrect');
+    const total = questions.length;
+    let correctCount = 0;
+    const missing = [];
+
+    for (let i = 0; i < total; i++) {
+        const q = questions[i];
+        const inputs = document.querySelectorAll(`input[name="q${i}"]`);
+        // tisztítás
+        inputs.forEach(inp => {
+            inp.parentElement.classList.remove('correct', 'incorrect');
+        });
+
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+            missing.push(i + 1);
+            continue;
+        }
+
+        const selectedBool = (selected.value === "true");
+        const isCorrect = (selectedBool === q.answer);
+
+        if (isCorrect) {
+            correctCount++;
+            selected.parentElement.classList.add('correct');
+        } else {
+            // kijelöljük a felhasználó választását hibásnak
+            selected.parentElement.classList.add('incorrect');
+            // és megjelöljük a helyes választ is
+            const correctValue = q.answer ? "true" : "false";
+            const correctInput = document.querySelector(`input[name="q${i}"][value="${correctValue}"]`);
+            if (correctInput) correctInput.parentElement.classList.add('correct');
+        }
+    }
+
+    const resultEl = document.getElementById('result');
+    const answerKeyEl = document.getElementById('answerKey');
+
+    if (missing.length) {
+        resultEl.textContent = 'Kérlek válaszolj minden kérdésre! Hiányzó kérdések: ' + missing.join(', ');
+        answerKeyEl.style.display = 'none';
+        return;
+    }
+
+    const pct = Math.round((correctCount / total) * 100);
+    resultEl.textContent = `Helyes: ${correctCount}/${total} — ${pct}%.`;
+
+    // megjelenítjük a javítókulcsot (I/H formában)
+    let keyHtml = '<strong>Javítókulcs:</strong><ul>';
+    for (let i = 0; i < total; i++) {
+        keyHtml += `<li>${i + 1}. — ${questions[i].answer ? 'Igaz' : 'Hamis'}</li>`;
+    }
+    keyHtml += '</ul>';
+    answerKeyEl.innerHTML = keyHtml;
+    answerKeyEl.style.display = 'block';
+}
+
+/* Visszaállítás */
+function resetQuiz() {
+    const total = questions.length;
+    for (let i = 0; i < total; i++) {
+        const radios = document.getElementsByName('q' + i);
+        for (let r of radios) r.checked = false;
+        radios.forEach ? radios.forEach(r => r.parentElement.classList.remove('correct','incorrect')) : null;
+        // fallback if NodeList doesn't support forEach in old browsers
+        for (let r of radios) {
+            if (r.parentElement) {
+                r.parentElement.classList.remove('correct','incorrect');
             }
         }
-    });
+    }
+    document.getElementById('result').textContent = '';
+    document.getElementById('answerKey').style.display = 'none';
 }
+
+/* Eseménykezelők */
+document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+document.getElementById('resetBtn').addEventListener('click', resetQuiz);
 </script>
 
 </body>

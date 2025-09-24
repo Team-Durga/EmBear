@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Igaz vagy Hamis Quiz</title>
+<style>
+    /* Alap stílusok */
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #f8f9fa, #e9ecef);
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+        text-align: center;
+        color: #343a40;
+        margin-bottom: 20px;
+    }
+
+    #quiz {
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .question {
+        background: white;
+        padding: 20px;
+        margin: 10px 0;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+    .question:hover {
+        transform: scale(1.02);
+    }
+
+    .question p {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        color: #495057;
+    }
+
+    label {
+        display: block;
+        margin: 5px 0;
+        font-size: 0.95rem;
+        cursor: pointer;
+    }
+
+    input[type="radio"] {
+        margin-right: 8px;
+        accent-color: #007bff;
+    }
+
+    button {
+        padding: 12px 25px;
+        margin: 20px 0;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #result {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #212529;
+        margin-top: 10px;
+    }
+
+    /* Reszponzív */
+    @media (max-width: 768px) {
+        body {
+            padding: 10px;
+        }
+
+        .question {
+            padding: 15px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        button {
+            width: 100%;
+        }
+    }
+</style>
+</head>
+<body>
+
+<h1>Igaz vagy Hamis Quiz</h1>
+
+<div id="quiz"></div>
+<button onclick="checkAnswers()">Eredmény</button>
+<div id="result"></div>
+
+<script>
+const questions = [
+    { text: "1. A kibővített csillag topológiát akkor szokás alkalmazni, ha a lehető legnagyobb mértékű védelmet kell elérni az esetleges szolgáltatás kimaradással szemben.", answer: true },
+    { text: "2. A legtöbb hálózati operációs rendszer az ügyfél-kiszolgáló modellt követi.", answer: true },
+    { text: "3. A hálózati erőforrások (fájlok, nyomtatók, alkalmazások) kiszolgálókon való koncentrálása megnehezíti az adatok karbantartását és biztonsági mentését.", answer: false },
+    { text: "4. Ha a külső felhasználó számára nem ismert a hálózathoz való csatlakozás feltételrendszere, a hálózat működése, akkor nyilvánosság szerint zárt hálózatról beszélünk.", answer: true },
+    { text: "5. Ethernet hálózatokban a véletlen átvitelvezérlés az alkalmazott.", answer: true },
+    { text: "6. A vonalkapcsolás esetén az adó és a vevő is egy központhoz kapcsolódik.", answer: true },
+    { text: "7. Half-duplex kommunikációnál a hálózati kommunikáció kétirányú.", answer: false },
+    { text: "8. Az átvitel sávszélességét mindig a leggyorsabb elem sebessége határozza meg.", answer: false },
+    { text: "9. A csavart érpáras kábelek közül az STP az elterjedtebb.", answer: false },
+    { text: "10. A mikrohullámú átvitel működésének feltétele, hogy a két antennának látnia kell egymást.", answer: true }
+];
+
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((q, index) => {
+    const div = document.createElement("div");
+    div.className = "question";
+    div.innerHTML = `
+        <p>${q.text}</p>
+        <label><input type="radio" name="q${index}" value="true"> Igaz</label>
+        <label><input type="radio" name="q${index}" value="false"> Hamis</label>
+    `;
+    quizDiv.appendChild(div);
+});
+
+function checkAnswers() {
+    let score = 0;
+    questions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected) {
+            if ((selected.value === "true") === q.answer) score++;
+        }
+    });
+    document.getElementById("result").innerHTML = `Eredmény: ${score} / ${questions.length}`;
+}
+</script>
+
+</body>
+</html>

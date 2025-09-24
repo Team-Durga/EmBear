@@ -17,7 +17,7 @@ def rgb888_to_rgb565(img):
 
 FRAMEBUFFER = "/dev/fb0"
 
-# ---- 1. emotion detection model ----
+#emotion detection model
 emotion_path = "model.tflite"
 emotion_model = Interpreter(model_path=emotion_path)
 emotion_model.allocate_tensors()
@@ -25,18 +25,18 @@ emotion_input = emotion_model.get_input_details()
 emotion_output = emotion_model.get_output_details()
 emotions = ['Angry','Disgust','Fear','Happy','Sad','Surprise','Neutral']
 
-# ---- 2. camera ----
+#camera
 picam2 = Picamera2()
 picam2.start()
 time.sleep(2)
 
-# ---- 3. font type ----
+#font type
 # font = ImageFont.load_default()
 font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 font_size = 22
 font = ImageFont.truetype(font_path, font_size)
 
-# ---- 4. main loop ----
+#main loop
 while True:
     frame = picam2.capture_array()  # NumPy array, BGR
     h, w, _ = frame.shape

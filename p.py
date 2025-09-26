@@ -89,4 +89,4 @@ while True:
     with open(FRAMEBUFFER, "wb") as fb:
         fb.write(img_rgb565)
 
-    time.sleep(1
+    time.sleep(1)

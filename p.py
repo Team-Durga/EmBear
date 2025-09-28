@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from tflite_runtime.interpreter import Interpreter
+from tflite_runtime.interpreter import Interpreter  # <-- tflite-runtime
 from PIL import Image, ImageDraw, ImageFont
 from picamera2 import Picamera2
 import time
@@ -12,12 +12,12 @@ def rgb888_to_rgb565(img):
     g = (arr[...,1] >> 2).astype(np.uint16)
     b = (arr[...,2] >> 3).astype(np.uint16)
     rgb565 = (r << 11) | (g << 5) | b
-    return rgb565.astype('<u2').tobytes() # little-endian sorrend
+    return rgb565.astype('<u2').tobytes()
 
 FRAMEBUFFER = "/dev/fb0"
 
 # Emotion detection model
-emotion_path = "model.tflite"
+emotion_path = "modell_compatible.tflite"
 emotion_model = Interpreter(model_path=emotion_path)
 emotion_model.allocate_tensors()
 emotion_input = emotion_model.get_input_details()
@@ -51,8 +51,6 @@ repeat_count = 0
 # Main loop
 while True:
     frame = picam2.capture_array()  # NumPy array, BGR
-    h, w, _ = frame.shape
-
     face_img = Image.fromarray(frame).convert('L')  # gray
     face_resized = face_img.resize((224,224))
     face_array = np.expand_dims(np.array(face_resized).astype('float32')/255.0, axis=0)
@@ -81,11 +79,9 @@ while True:
     draw = ImageDraw.Draw(img_display)
     draw.text((10, 30), "Emotion:", fill=(0, 0, 100), font=font_small)
     draw.text((10, 60), display_text, fill=(0, 0, 100), font=font_big)
-    
-    # Shown on the framebuffer
-    img_resized = img_display.resize((240,135)).convert('RGB')
-    img_rgb565 = rgb888_to_rgb565(img_resized)
 
+    # Shown on the framebuffer
+    img_rgb565 = rgb888_to_rgb565(img_display)
     with open(FRAMEBUFFER, "wb") as fb:
         fb.write(img_rgb565)
 

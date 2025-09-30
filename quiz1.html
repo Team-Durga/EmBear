@@ -132,7 +132,7 @@
 <div id="answerKey" style="display:none"></div>
 
 <script>
-/* Javított helyes válaszok (boolean formátumban) */
+/* 20 kérdés: eredeti 10 + új 10 */
 const questions = [
     { text: "1. A kibővített csillag topológiát akkor szokás alkalmazni, ha a lehető legnagyobb mértékű védelmet kell elérni az esetleges szolgáltatás kimaradással szemben.", answer: false },
     { text: "2. A legtöbb hálózati operációs rendszer az ügyfél-kiszolgáló modellt követi.", answer: true },
@@ -143,7 +143,19 @@ const questions = [
     { text: "7. Half-duplex kommunikációnál a hálózati kommunikáció kétirányú.", answer: true },
     { text: "8. Az átvitel sávszélességét mindig a leggyorsabb elem sebessége határozza meg.", answer: false },
     { text: "9. A csavart érpáras kábelek közül az STP az elterjedtebb.", answer: false },
-    { text: "10. A mikrohullámú átvitel működésének feltétele, hogy a két antennának látnia kell egymást.", answer: true }
+    { text: "10. A mikrohullámú átvitel működésének feltétele, hogy a két antennának látnia kell egymást.", answer: true },
+
+    // Új 10 kérdés
+    { text: "11. A hálózatokat a tervezés és megvalósítás könnyítésének érdekében rétegekre (layer) osztják.", answer: true },
+    { text: "12. Egy hálózat rétegeinek és protokolljainak halmazát hálózati architektúrának hívjuk.", answer: true },
+    { text: "13. Az OSI referencia modell szerint egy hálózatot 6 rétegre osztunk.", answer: false }, // helyes: 7 réteg
+    { text: "14. Az OSI modell hálózati rétege a végpontok közötti hibamentes adatátvitel biztosításáért felelős.", answer: false }, // hibamentes átvitel a szállítási réteg feladata
+    { text: "15. A TCP/IP modell szállítási rétege az egymásnak üzenetet küldő két végpontot összekötő réteg.", answer: true },
+    { text: "16. A TCP/IP modell tartalmazza az OSI modell viszony- és a megjelenítési rétegeit.", answer: false }, // ezek beolvadnak az alkalmazási rétegbe
+    { text: "17. Ha egy gép adatot akar küldeni egy másik számítógépnek, akkor a küldendő adatokat be kell csomagolnia. Ezt a folyamatot beágyazásnak nevezzük.", answer: true },
+    { text: "18. A több gyártó elfogadott, alkalmazott technológiákat, illetve szabványügyi szervezetek által kidolgozott ajánlásokat szabványoknak nevezzük.", answer: true },
+    { text: "19. Napjaink legszélesebb körben használt WAN technológiája az Ethernet.", answer: false }, // Ethernet elsősorban LAN technológia
+    { text: "20. A maximális átviteli egység (maximum transmission unit, MTU) az Ethernet esetében 1536 oktett.", answer: false } // szabványos MTU: 1500 bájt
 ];
 
 const quizDiv = document.getElementById("quiz");
@@ -170,10 +182,7 @@ function checkAnswers() {
     for (let i = 0; i < total; i++) {
         const q = questions[i];
         const inputs = document.querySelectorAll(`input[name="q${i}"]`);
-        // tisztítás
-        inputs.forEach(inp => {
-            inp.parentElement.classList.remove('correct', 'incorrect');
-        });
+        inputs.forEach(inp => inp.parentElement.classList.remove('correct', 'incorrect'));
 
         const selected = document.querySelector(`input[name="q${i}"]:checked`);
         if (!selected) {
@@ -188,9 +197,7 @@ function checkAnswers() {
             correctCount++;
             selected.parentElement.classList.add('correct');
         } else {
-            // kijelöljük a felhasználó választását hibásnak
             selected.parentElement.classList.add('incorrect');
-            // és megjelöljük a helyes választ is
             const correctValue = q.answer ? "true" : "false";
             const correctInput = document.querySelector(`input[name="q${i}"][value="${correctValue}"]`);
             if (correctInput) correctInput.parentElement.classList.add('correct');
@@ -209,7 +216,6 @@ function checkAnswers() {
     const pct = Math.round((correctCount / total) * 100);
     resultEl.textContent = `Helyes: ${correctCount}/${total} — ${pct}%.`;
 
-    // megjelenítjük a javítókulcsot (I/H formában)
     let keyHtml = '<strong>Javítókulcs:</strong><ul>';
     for (let i = 0; i < total; i++) {
         keyHtml += `<li>${i + 1}. — ${questions[i].answer ? 'Igaz' : 'Hamis'}</li>`;
@@ -225,8 +231,6 @@ function resetQuiz() {
     for (let i = 0; i < total; i++) {
         const radios = document.getElementsByName('q' + i);
         for (let r of radios) r.checked = false;
-        radios.forEach ? radios.forEach(r => r.parentElement.classList.remove('correct','incorrect')) : null;
-        // fallback if NodeList doesn't support forEach in old browsers
         for (let r of radios) {
             if (r.parentElement) {
                 r.parentElement.classList.remove('correct','incorrect');

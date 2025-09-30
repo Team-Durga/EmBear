@@ -1,88 +1,100 @@
-# -*- coding: utf-8 -*-
+import subprocess
+import cv2
 import numpy as np
-from tflite_runtime.interpreter import Interpreter  # <-- tflite-runtime
-from PIL import Image, ImageDraw, ImageFont
-from picamera2 import Picamera2
 import time
+from fer import FER
+from PIL import Image, ImageDraw, ImageFont
+import os
 
-def rgb888_to_rgb565(img):
-    """PIL.Image (RGB) -> bytes (RGB565)"""
-    arr = np.array(img, dtype=np.uint8)
-    r = (arr[...,0] >> 3).astype(np.uint16)
-    g = (arr[...,1] >> 2).astype(np.uint16)
-    b = (arr[...,2] >> 3).astype(np.uint16)
-    rgb565 = (r << 11) | (g << 5) | b
-    return rgb565.astype('<u2').tobytes()
-
+# --- PiTFT beállítás ---
 FRAMEBUFFER = "/dev/fb0"
+WIDTH = 240
+HEIGHT = 135
 
-# Emotion detection model
-emotion_path = "modell_compatible.tflite"
-emotion_model = Interpreter(model_path=emotion_path)
-emotion_model.allocate_tensors()
-emotion_input = emotion_model.get_input_details()
-emotion_output = emotion_model.get_output_details()
+# --- FER setup ---
+detector = FER()
 
-emotions = ['Angry','Disgust','Fear','Happy','Sad','Surprise','Neutral']
+# --- Emoji mapping (egyszínű karakterek) ---
 emojis = {
-    'Angry': "😠",
-    'Disgust': "😖",
-    'Fear': "😧",
-    'Happy': "😃",
-    'Sad': "😢",
-    'Surprise': "😲",
-    'Neutral': "😐"
+    "angry": "😠",
+    "disgust": "😖",
+    "fear": "😧",
+    "happy": "😃",
+    "sad": "😢",
+    "surprise": "😲",
+    "neutral": "😐",
 }
 
-# Camera
-picam2 = Picamera2()
-picam2.start()
-time.sleep(2)
+# --- Betűtípus ---
+try:
+    font_path= "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+    font_small = ImageFont.truetype(font_path, 48)
+    font_big   = ImageFont.truetype(font_path, 48)
+except:
+    font_small = ImageFont.load_default()
+    font_big   = ImageFont.load_default()
+# --- RGB565 konverzió ---
+def rgb_to_565(img):
+    img = img.convert('RGB')
+    arr = np.array(img)
+    r = (arr[:,:,0] >> 3).astype(np.uint16)
+    g = (arr[:,:,1] >> 2).astype(np.uint16)
+    b = (arr[:,:,2] >> 3).astype(np.uint16)
+    rgb565 = (r << 11) | (g << 5) | b
+    return rgb565.tobytes()
 
-# Font
-font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
-font_small = ImageFont.truetype(font_path, 28)
-font_big   = ImageFont.truetype(font_path, 37)
+# --- Kép kirajzolása a framebufferre ---
+def show_on_fb(emotion, emoji_text):
+    image = Image.new("RGB", (WIDTH, HEIGHT), (255, 255, 255))
+    draw = ImageDraw.Draw(image)
 
-# State variables
-last_emotion = None
-repeat_count = 0
+    # Emoji + érzelem
+    draw.text((10, 10), emoji_text, font=font_small, fill=(0, 0, 100))
+    draw.text((10, 60), emotion, font=font_big, fill=(0, 0, 100))
 
-# Main loop
-while True:
-    frame = picam2.capture_array()  # NumPy array, BGR
-    face_img = Image.fromarray(frame).convert('L')  # gray
-    face_resized = face_img.resize((224,224))
-    face_array = np.expand_dims(np.array(face_resized).astype('float32')/255.0, axis=0)
-    face_array = np.repeat(face_array[..., np.newaxis], 3, axis=-1)
+    # Írás framebufferre RGB565-ben
+    with open(FRAMEBUFFER, "wb") as f:
+        f.write(rgb_to_565(image))
 
-    # TFLite prediction
-    emotion_model.set_tensor(emotion_input[0]['index'], face_array)
-    emotion_model.invoke()
-    output_data = emotion_model.get_tensor(emotion_output[0]['index'])
-    emotion_label = emotions[np.argmax(output_data[0])]
+# --- Libcamera folyamat ---
+command = [
+    "libcamera-vid",
+    "--inline",
+    "-t", "0",
+    "--width", "640",
+    "--height", "480",
+    "--framerate", "30",
+    "-o", "-",
+    "--codec", "yuv420"
+]
 
-    # Check if repeated
-    if emotion_label == last_emotion:
-        repeat_count += 1
-    else:
-        repeat_count = 1
-        last_emotion = emotion_label
+proc = subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=10**8)
 
-    if repeat_count >= 2:
-        display_text = f"{emojis[emotion_label]} {emotion_label}"
-    else:
-        display_text = "None"
+print("Indul az érzelem-felismerés. Ctrl+C a kilépéshez.")
 
-    # Display pic
-    img_display = Image.new('RGB', (240,135), color=(255,255,255))
-    draw = ImageDraw.Draw(img_display)
-    draw.text((10, 30), "Emotion:", fill=(0, 0, 100), font=font_small)
-    draw.text((10, 60), display_text, fill=(0, 0, 100), font=font_big)
+try:
+    while True:
+        raw = proc.stdout.read(640 * 480 * 3 // 2)
+        if not raw:
+            print("Nem sikerült képet olvasni.")
+            break
 
-    # Shown on the framebuffer
-    img_rgb565 = rgb888_to_rgb565(img_display)
-    with open(FRAMEBUFFER, "wb") as fb:
-        fb.write(img_rgb565)
+        yuv = np.frombuffer(raw, dtype=np.uint8).reshape((int(480 * 1.5), 640))
+        frame = cv2.cvtColor(yuv, cv2.COLOR_YUV2BGR_I420)
 
-    time.sleep(1)
+        result = detector.top_emotion(frame)
+        if isinstance(result, tuple) and len(result) == 2 and all(result):
+            emotion, score = result
+            print(f"Észlelt: {emotion} ({score:.2f})")
+            emoji = emojis.get(emotion, ":|")
+            show_on_fb(emotion, emoji)
+        else:
+            print("Nem észlelhető arc vagy érzelem.")
+
+        time.sleep(2)
+
+except KeyboardInterrupt:
+    print("Leállítva.")
+
+finally:
+    proc.terminate()

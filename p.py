@@ -6,15 +6,15 @@ from fer import FER
 from PIL import Image, ImageDraw, ImageFont
 import os
 
-# --- PiTFT beállítás ---
+#PiTFT settings
 FRAMEBUFFER = "/dev/fb0"
 WIDTH = 240
 HEIGHT = 135
 
-# --- FER setup ---
+#FER setup
 detector = FER()
 
-# --- Emoji mapping (egyszínű karakterek) ---
+#Emoji mapping
 emojis = {
     "angry": "😠",
     "disgust": "😖",
@@ -25,7 +25,7 @@ emojis = {
     "neutral": "😐",
 }
 
-# --- Betűtípus ---
+#Font type
 try:
     font_path= "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     font_small = ImageFont.truetype(font_path, 48)
@@ -33,7 +33,7 @@ try:
 except:
     font_small = ImageFont.load_default()
     font_big   = ImageFont.load_default()
-# --- RGB565 konverzió ---
+#RGB565 things
 def rgb_to_565(img):
     img = img.convert('RGB')
     arr = np.array(img)
@@ -43,20 +43,20 @@ def rgb_to_565(img):
     rgb565 = (r << 11) | (g << 5) | b
     return rgb565.tobytes()
 
-# --- Kép kirajzolása a framebufferre ---
+#Picture drawing to the framebuffer
 def show_on_fb(emotion, emoji_text):
     image = Image.new("RGB", (WIDTH, HEIGHT), (255, 255, 255))
     draw = ImageDraw.Draw(image)
 
-    # Emoji + érzelem
+    #Emojis + emotion
     draw.text((10, 10), emoji_text, font=font_small, fill=(0, 0, 100))
     draw.text((10, 60), emotion, font=font_big, fill=(0, 0, 100))
 
-    # Írás framebufferre RGB565-ben
+    #Write to the framebuffer in RGB565
     with open(FRAMEBUFFER, "wb") as f:
         f.write(rgb_to_565(image))
 
-# --- Libcamera folyamat ---
+#Libcamera process
 command = [
     "libcamera-vid",
     "--inline",

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IPv4 & Internet alapok — Kvíz (dark-tech)</title>
+  <style>
+    :root{
+      --bg:#0b0f14; --panel:#091018; --accent:#00d1ff; --muted:#6b7280; --glass:rgba(255,255,255,0.03);
+      --success:#17c964; --danger:#ff4d6d; --card-radius:14px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:radial-gradient(ellipse at 20% 10%, rgba(0,209,255,0.03), transparent 10%), linear-gradient(180deg,#06080b 0%, #08101a 100%);
+      color:#e6eef6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      padding:20px; display:flex; align-items:flex-start; justify-content:center;
+    }
+
+    .container{max-width:980px; width:100%;}
+    header{display:flex; align-items:center; gap:16px; margin-bottom:18px}
+    .logo{width:52px; height:52px; border-radius:12px; background:linear-gradient(135deg,var(--accent),#7b61ff); display:flex; align-items:center; justify-content:center; font-weight:700; color:#021018; box-shadow:0 6px 18px rgba(0,0,0,0.6);}
+    h1{font-size:18px; margin:0}
+    p.lead{margin:0;color:var(--muted); font-size:13px}
+
+    main{display:grid; grid-template-columns:1fr 360px; gap:18px; align-items:start}
+
+    /* left panel */
+    .card{background:linear-gradient(180deg,var(--panel), rgba(255,255,255,0.02)); border-radius:var(--card-radius); padding:18px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);}
+
+    .question{margin-bottom:14px; padding:12px; border-radius:10px; background:var(--glass);}
+    .q-title{font-weight:600; font-size:15px}
+    .q-body{color:var(--muted); margin-top:8px; font-size:14px}
+
+    .options{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+    .opt{padding:10px 12px; border-radius:10px; background:transparent; border:1px solid rgba(255,255,255,0.06); cursor:pointer; min-width:86px; text-align:center}
+    .opt.selected{border-color:var(--accent); box-shadow:0 6px 18px rgba(0,209,255,0.06);}
+    button.primary{background:linear-gradient(90deg,var(--accent),#7b61ff); border:none; color:#021018; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:600}
+
+    /* right side */
+    aside .card{position:sticky; top:20px}
+    .meta-row{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px}
+    .pill{background:rgba(255,255,255,0.03); padding:6px 10px; border-radius:999px; color:var(--muted); font-size:13px}
+
+    .explain{margin-top:10px; padding:10px; border-radius:8px; background:rgba(0,0,0,0.2); color:var(--muted); font-size:13px; display:none}
+    .explain.show{display:block}
+
+    .result{padding:12px; border-radius:10px; margin-top:8px; text-align:center}
+    .score{font-size:22px; font-weight:700}
+
+    footer{margin-top:18px; text-align:center; color:var(--muted); font-size:13px}
+
+    /* responsive */
+    @media (max-width:900px){
+      main{grid-template-columns:1fr;}
+      aside{order:2}
+    }
+
+    /* small touches */
+    .correct{border-color:var(--success); box-shadow:0 8px 28px rgba(23,201,100,0.06)}
+    .wrong{border-color:var(--danger); box-shadow:0 8px 28px rgba(255,77,109,0.06)}
+    .muted-small{color:var(--muted); font-size:13px}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">IP</div>
+      <div>
+        <h1>IPv4 & Internet alapok — Kvíz</h1>
+        <p class="lead">Dark-tech stílus, mobiloptimalizált. Válaszolj a kérdésekre, majd nézd meg az indoklást!</p>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <div class="card" id="quiz-area">
+          <!-- Questions will be injected here -->
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <button class="primary" id="check-btn">Ellenőriz</button>
+          <button class="" id="next-btn">Következő kérdés</button>
+          <div style="flex:1"></div>
+          <div class="muted-small">Kérdés: <span id="q-index">0</span>/<span id="q-total">0</span></div>
+        </div>
+      </section>
+
+      <aside>
+        <div class="card">
+          <div class="meta-row">
+            <div>
+              <div class="pill">Pontszám</div>
+              <div class="score" id="score">0</div>
+            </div>
+            <div style="text-align:right">
+              <div class="pill">Helyes: <span id="correct-count">0</span></div>
+              <div class="pill" style="margin-top:6px">Hibás: <span id="wrong-count">0</span></div>
+            </div>
+          </div>
+
+          <div class="muted-small" style="margin-top:6px">Jelenlegi kérdéshez indoklás (nyomd meg):</div>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button id="show-explain" class="" style="padding:8px 10px; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.04)">Indoklás mutatása</button>
+            <button id="show-all" style="padding:8px 10px; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.04)">Minden indoklás</button>
+          </div>
+
+          <div class="explain" id="explain-box"></div>
+
+          <div style="margin-top:12px">
+            <div class="muted-small">Gyors áttekintés:</div>
+            <ul style="padding-left:18px; color:var(--muted); margin-top:8px; font-size:13px">
+              <li>A,B,C osztályok első oktett tartománya, privát címek és loopback megtalálható.</li>
+              <li>IPv4 = 32 bit, IPv6 = 128 bit.</li>
+              <li>IP címek beállíthatók statikusan és dinamikusan (DHCP).</li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      Készítette: Kvíz generátor • Mobil és asztali nézet támogatott
+    </footer>
+  </div>
+
+  <script>
+    // Questions (első rész: információs kérdések; második rész: igaz/hamis + indoklás)
+    const questions = [
+      // --- rész 1: több választós információs kérdések ---
+      {
+        id: 'q1', type: 'mcq',
+        title: 'Melyik IP-osztály tartozik az első oktett 0–127 tartományához?',
+        options: ['A osztály', 'B osztály', 'C osztály', 'D osztály'],
+        answer: 0,
+        explain: 'Az A osztály bináris prefixe 0xxxxxxx, az első oktett 0–127 közé esik. Maszkszerkezet: 255.0.0.0.'
+      },
+      {
+        id: 'q2', type: 'mcq',
+        title: 'Milyen alhálózati maszkot használ tipikusan egy C-osztályú hálózat?',
+        options: ['255.255.255.0', '255.0.0.0', '255.255.0.0', '255.255.255.128'],
+        answer: 0,
+        explain: 'A C osztályra tipikusan /24 (255.255.255.0) maszk jellemző, 24 bites hálózati rész.'
+      },
+      {
+        id: 'q3', type: 'mcq',
+        title: 'Melyik tartomány a privát A osztályú címeké?',
+        options: ['10.0.0.0–10.255.255.255', '172.16.0.0–172.31.255.255', '192.168.0.0–192.168.255.255', '127.0.0.1–127.255.255.255'],
+        answer: 0,
+        explain: 'A privát A tartomány a 10.0.0.0/8 rozszám: 10.0.0.0–10.255.255.255.'
+      },
+      {
+        id: 'q4', type: 'mcq',
+        title: 'Mit jelent a loopback cím (pl. 127.0.0.1)?',
+        options: ['A saját gép címe tesztelésre', 'Publikus internetes cím', 'Multicast cím', 'Privát B osztályú hálózat'],
+        answer: 0,
+        explain: 'Loopback (127.x.x.x) a helyi gépre irányuló cím, lokális tesztelésre szolgál (127.0.0.1 = localhost).'
+      },
+      {
+        id: 'q5', type: 'mcq',
+        title: 'Melyik állítás igaz a publikus és privát címekre?',
+        options: ['Privát címek nem érhetők el közvetlenül az internetről','Publikus címek csak helyi hálózatban használatosak','Privát címek mindig 127.x.x.x','Publikus címek soha nem routolhatóak'],
+        answer: 0,
+        explain: 'A privát címek belső hálózatokra szolgálnak, az internet felől nem érhetők el közvetlenül; publikus címek routolhatóak az interneten.'
+      },
+
+      // --- rész 2: igaz/hamis állítások ---
+      { id:'t1', type:'tf', title:'Az Internet zárt architektúrájú.', statement:'Az Internet zárt architektúrájú, technikai szempontból központ nélküli, összekapcsolt hálózatok rendszere.', answer:false, explain:'Az Internet **nyílt architektúrájú**; nem zárt. A „központ nélküli, összekapcsolt hálózatok” része azonban igaz.' },
+      { id:'t2', type:'tf', title:'Az ARPANET volt az Internet elődje.', statement:'Az Internet elődjének az ARPANET-et tekintjük.', answer:true, explain:'Az ARPANET az egyik történelmi előd, amelyből az Internet fejlődött az 1960–70-es években.' },
+      { id:'t3', type:'tf', title:'A TCP/IP egy protokollkészlet.', statement:'A TCP/IP egy protokollkészlet, amit az internetes kommunikációhoz fejlesztettek ki.', answer:true, explain:'A TCP/IP valójában egy protokollcsalád (Internet Protocol suite), amely lehetővé teszi a hálózati kommunikációt és erőforrások megosztását.' },
+      { id:'t4', type:'tf', title:'Minden csomagnak garantált útvonala van.', statement:'A hálózatban egyedi adatcsomagok haladnak, és a csomagban lévő cím alapján keressük az útvonalat. Ez az útvonal biztosan létezik.', answer:false, explain:'A csomagkapcsolt hálózatoknál az útvonal nem garantált — hálózati hibák, torlódás vagy szabályok miatt csomag elvész vagy késik.' },
+      { id:'t5', type:'tf', title:'Mi az IP Routing?', statement:'Az IP Routing egy folyamat, amellyel egy több interfésszel rendelkező eszköz dönt arról, hová továbbítson beérkező csomagokat.', answer:true, explain:'Ez a routing definíciója: a host/router a routing tábla alapján dönt.' },
+      { id:'t6', type:'tf', title:'Az IPv4 bájtok értéke 0-257.', statement:'Az IPv4 32 bites, 4 bájtos azonosító, a bájtok értéke 0-257 közé esik.', answer:false, explain:'Az IPv4 bájtjai 0–255 közötti értékeket vehetnek fel (1 bájt = 8 bit).' },
+      { id:'t7', type:'tf', title:'IP címek csak statikusan állíthatók be.', statement:'Az IP címek beállítása csak statikusan történhet.', answer:false, explain:'IP címeket dinamikusan is kioszthat DHCP szerver (pl. otthoni router), vagy statikusan konfigurálhatunk.' },
+      { id:'t8', type:'tf', title:'Loopback = saját gép.', statement:'A loopback egy áleszköz, ami a saját számítógépünket jelenti.', answer:true, explain:'A loopback (127.0.0.1) a helyi gép tesztelésére szolgáló cím.' },
+      { id:'t9', type:'tf', title:'IPv6 csak 64 bitet használ.', statement:'Az IPv6 64 bitet használ címzésre.', answer:false, explain:'Az IPv6 valójában 128 bites címeket használ.' },
+      { id:'t10', type:'tf', title:'IPv6 kompatibilis az IPv4-gyel.', statement:'Az IPv6 kompatibilis az IPv4-el.', answer:false, explain:'IPv6 és IPv4 nem natívan kompatibilisek; azonban átjárási megoldások (dual-stack, tunneling) léteznek.' }
+    ];
+
+    // state
+    let currentIndex = 0;
+    let score = 0; let correctCount=0; let wrongCount=0;
+
+    const quizArea = document.getElementById('quiz-area');
+    const qIndexEl = document.getElementById('q-index');
+    const qTotalEl = document.getElementById('q-total');
+    const checkBtn = document.getElementById('check-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreEl = document.getElementById('score');
+    const correctEl = document.getElementById('correct-count');
+    const wrongEl = document.getElementById('wrong-count');
+    const showExplainBtn = document.getElementById('show-explain');
+    const showAllBtn = document.getElementById('show-all');
+    const explainBox = document.getElementById('explain-box');
+
+    qTotalEl.textContent = questions.length;
+
+    function renderQuestion(i){
+      const q = questions[i];
+      qIndexEl.textContent = i+1;
+      explainBox.classList.remove('show'); explainBox.textContent = '';
+
+      let html = `<div class="question" data-qid="${q.id}">`;
+      html += `<div class="q-title">${q.type==='tf'? 'Igaz/Hamis: ' : ''}${q.title}</div>`;
+      if(q.type==='mcq'){ html += `<div class="q-body">Válassz egy választ:</div>`; }
+      if(q.type==='tf'){ html += `<div class="q-body">${q.statement}</div>`; }
+
+      html += `<div class="options">`;
+
+      if(q.type==='mcq'){
+        q.options.forEach((opt,idx)=>{
+          html += `<div class="opt" data-idx="${idx}">${opt}</div>`;
+        });
+      } else if(q.type==='tf'){
+        html += `<div class="opt" data-tf="true" data-val="true">Igaz</div>`;
+        html += `<div class="opt" data-tf="true" data-val="false">Hamis</div>`;
+      }
+
+      html += `</div>`; // options
+      html += `<div class="explain" id="local-explain" style="display:none;margin-top:10px"></div>`;
+      html += `</div>`;
+      quizArea.innerHTML = html;
+
+      // attach option handlers
+      document.querySelectorAll('.opt').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+          el.classList.add('selected');
+        });
+      });
+    }
+
+    function checkAnswer(){
+      const q = questions[currentIndex];
+      const selected = document.querySelector('.opt.selected');
+      if(!selected){ alert('Válassz egy opciót először!'); return; }
+
+      let correct = false;
+      if(q.type==='mcq'){
+        const idx = Number(selected.getAttribute('data-idx'));
+        correct = idx === q.answer;
+      } else {
+        const val = selected.getAttribute('data-val') === 'true';
+        correct = val === q.answer;
+      }
+
+      // mark UI
+      selected.classList.add(correct? 'correct':'wrong');
+      // show local explanation
+      const local = document.getElementById('local-explain');
+      local.textContent = q.explain || '';
+      local.style.display = 'block';
+
+      // update score
+      if(correct){ score += 10; correctCount++; } else { wrongCount++; }
+      scoreEl.textContent = score; correctEl.textContent = correctCount; wrongEl.textContent = wrongCount;
+
+      // reveal explain box content for side panel
+      explainBox.textContent = q.explain || '';
+      explainBox.classList.add('show');
+
+      // disable further change for this question
+      document.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+    }
+
+    function nextQuestion(){
+      if(currentIndex < questions.length-1){ currentIndex++; renderQuestion(currentIndex);} else { alert('Végére értél a kvíznek! Az eredményed a jobb oldalon látható.'); }
+    }
+
+    // show all explanations
+    function showAllExplanations(){
+      let all = questions.map((q,idx)=>`${idx+1}. ${q.type==='tf'? q.title : q.title} — Indoklás: ${q.explain || 'Nincs indoklás'}`).join('\n\n');
+      // show in modal-like explainBox
+      explainBox.textContent = all; explainBox.classList.add('show');
+      explainBox.style.whiteSpace = 'pre-wrap';
+    }
+
+    // init
+    renderQuestion(currentIndex);
+
+    checkBtn.addEventListener('click', checkAnswer);
+    nextBtn.addEventListener('click', nextQuestion);
+    showExplainBtn.addEventListener('click', ()=>{ explainBox.classList.toggle('show'); });
+    showAllBtn.addEventListener('click', showAllExplanations);
+
+    // allow Enter to check
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Enter'){ checkAnswer(); } if(e.key==='ArrowRight'){ nextQuestion(); } });
+  </script>
+</body>
+</html>
